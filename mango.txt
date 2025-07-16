@@ -1,0 +1,18 @@
+// test.js
+const mongoose = require('mongoose');
+
+// Replace this with your actual connection string
+const uri = "mongodb+srv://<username>:<password>@cluster0.xxxxxx.mongodb.net/bluc-db?retryWrites=true&w=majority";
+
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log("✅ MongoDB connected successfully!");
+  process.exit();
+})
+.catch((err) => {
+  console.error("❌ Error connecting to MongoDB:", err);
+  process.exit(1);
+});
