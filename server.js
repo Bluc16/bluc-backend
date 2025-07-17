@@ -6,15 +6,15 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import socketHandler from './socketHandler.js';
-import Razorpay from 'razorpay';
+import Razorpay from 'razorpay'; // ✅ Only one import
 import authRoutes from './routes/authRoutes.js';
 import subscriptionRoutes from './routes/subscriptionRoutes.js';
 import payment from './routes/paymentRoutes.js';
 import authMiddleware from './middleware/auth.middleware.js';
+import passport from './config/passport.js'; // moved with other imports
 
 // Load environment variables
 dotenv.config();
-import passport from './config/passport.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -32,7 +32,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
 // Connect to MongoDB
@@ -40,13 +40,11 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-import Razorpay from "razorpay";
+// ✅ Razorpay instance
 const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
-
-
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -59,6 +57,6 @@ io.on('connection', socket => {
   socketHandler(io, socket);
 });
 
+// Start server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
